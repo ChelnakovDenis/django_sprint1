@@ -1,6 +1,5 @@
 from django.shortcuts import render
-
-# Create your views here.
+from django.http import HttpResponseNotFound
 
 posts = [
     {
@@ -52,9 +51,13 @@ def index(request):
     return render(request, template, context)
 
 
-def post_detail(request, id):
+def post_detail(request, post_id):
     template = 'blog/detail.html'
-    context = {'post': posts[id]}
+    try:
+        post = posts[post_id]
+    except IndexError:
+        return HttpResponseNotFound('<h1>404 Page not found</h1>')
+    context = {'post': post}
     return render(request, template, context)
 
 
